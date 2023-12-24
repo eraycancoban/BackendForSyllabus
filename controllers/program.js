@@ -1,4 +1,3 @@
-import { session } from "neo4j-driver";
 import { driver } from "../driver.js";
 
 
@@ -27,12 +26,7 @@ export const addProgram = async(req,res)=>{
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Internal Server Error' });
-    } finally {
-        // Check if the session is open before trying to close it
-        if (session) {
-            await session.close();
-        }
-    }
+    } 
    
         
 }
@@ -43,4 +37,24 @@ export const removeProgram = (req,res)=>{
 
 export const getProgram=(req,res)=>{
 
-}
+    const session = driver.session();
+    session
+        .run('MATCH p=()-[:DERS_ALIR]->(Sınıf)-[:EĞITIM_GÜNÜ]->(Gün)-[:EĞITIM_SAATI]->(Saat) return p')
+        .then(function (result) {
+            const lessons = [];
+
+            result.records.forEach(function (record) {
+                lessons.push(record.get('p').properties);
+            });
+
+            // Send the response after the loop has completed
+            return res.json(lessons);
+        })
+        .catch(function (err) {
+            console.log(err);
+            // Handle the error and send an appropriate response if needed
+            res.status(500).json({ error: 'Internal Server Error' });
+        });
+   
+};
+    
