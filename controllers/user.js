@@ -39,11 +39,6 @@ export const login = async (req, res) => {
             return res.status(400).json("Kullanıcı bulunamadı");
           }
           
-       
-
-        if (!user) {
-            return res.status(400).json("Kullanıcı bulunamadı");
-        }
 
         const isPasswordCorrect = req.body.sifre==userProperties.sifre;
 
