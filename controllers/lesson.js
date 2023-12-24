@@ -31,8 +31,6 @@ export const myLessons = (req, res) => {
         });
 };
 
-
-
 export const addLesson = async (req, res) => {
     const kullaniciAdi = req.params.kullaniciAdi;
     const dersAdi = req.body.dersAdi;
