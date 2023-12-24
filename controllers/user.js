@@ -32,13 +32,14 @@ export const login = async (req, res) => {
     const session = driver.session();
     try {
         const result = await session.run('MATCH (u:Hoca {kullaniciAdi: $kullaniciAdi}) RETURN u', { kullaniciAdi });
-        if (result && result._fields) {
-            const user = result.records[0];        
-            const userProperties = user._fields[0].properties;
-          } else {
+        const user = result.records[0];        
+
+        if (!user) {
             return res.status(400).json("Kullanıcı bulunamadı");
-          }
-          
+        }
+
+        const userProperties = user._fields[0].properties;
+
 
         const isPasswordCorrect = req.body.sifre==userProperties.sifre;
 
